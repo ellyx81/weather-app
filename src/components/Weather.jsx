@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Weather.css';
 import search_icon from '../assets/search.png';
 import clear_icon from '../assets/clear.png';
@@ -8,10 +8,32 @@ import rain_icon from '../assets/rain.png';
 import snow_icon from '../assets/snow.png';
 import wind_icon from '../assets/wind.png';
 import humidity_icon from '../assets/humidity.png';
+import video_1 from '../assets/bg1.mp4';
+import video_2 from '../assets/bg2.mp4';
+import video_3 from '../assets/bg3.mp4';
+import video_4 from '../assets/bg4.mp4';
+import video_5 from '../assets/bg5.mp4';
 
 const Weather = () => {
     const [inputValue, setInputValue] = useState("");
     const [weatherData, setWeatherData] = useState(false);
+    const [videoBg, setVideoBg] = useState("");
+    const videoRef = useRef(null);
+
+    const videoList = [video_1, video_2, video_3, video_4, video_5];
+
+    useEffect(() => {
+        const currentIndex = parseInt(localStorage.getItem('videoIndex'), 10) || 0;
+        const nextIndex = (currentIndex + 1) % videoList.length;
+        localStorage.setItem('videoIndex', nextIndex);
+        setVideoBg(videoList[currentIndex]);
+    }, []);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.load();
+        }
+    }, [videoBg]);
 
     const allIcons = {
         "01d": clear_icon,
@@ -113,7 +135,18 @@ const Weather = () => {
                     <></>
                 )}
             </div>
-            <div className="video"></div>
+            <div className="video-container">
+                <video
+                    id="video"
+                    ref={videoRef}
+                    key={videoBg}
+                    autoPlay
+                    loop
+                    muted
+                >
+                    <source src={videoBg} type="video/mp4" />
+                </video>
+            </div>
         </>
     );
 };
