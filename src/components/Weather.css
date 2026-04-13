@@ -58,6 +58,11 @@
     color: #fff;
     font-size: 40px;
 }
+.date {
+    color: #fff;
+    font-size: 20px;
+    margin-top: 10px;
+}
 .weather-data {
     width: 100%;
     margin-top: 40px;

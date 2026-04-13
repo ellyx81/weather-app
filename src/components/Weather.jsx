@@ -18,6 +18,7 @@ const Weather = () => {
     const [inputValue, setInputValue] = useState("");
     const [weatherData, setWeatherData] = useState(false);
     const [videoBg, setVideoBg] = useState("");
+    const [localDate, setLocalDate] = useState("");
     const videoRef = useRef(null);
 
     const videoList = [video_1, video_2, video_3, video_4, video_5];
@@ -69,6 +70,21 @@ const Weather = () => {
 
             console.log(data);
             const icon = allIcons[data.weather[0].icon] || clear_icon;
+
+            const utcTime = new Date().getTime();
+            const localTime = new Date(utcTime + data.timezone * 1000);
+
+            const formattedLocalDate = localTime.toLocaleString("en-US", {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              timeZone: "UTC",
+            });
+
+            setLocalDate(formattedLocalDate);
+
             setWeatherData({
                 humidity: data.main.humidity,
                 windSpeed: data.wind.speed,
@@ -114,6 +130,8 @@ const Weather = () => {
                         <img src={weatherData.icon} alt="" className="weather-icon" />
                         <p className="temperature">{weatherData.temperature}°c</p>
                         <p className="location">{weatherData.location}</p>
+                        <span className="date">{localDate}</span>
+                        <br />
                         <div className="weather-data">
                             <div className="col">
                                 <img src={humidity_icon} alt="" />
